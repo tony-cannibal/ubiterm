@@ -1,21 +1,33 @@
 import pandas as pd
 # import const
-import fucn
+import func
 
-material = pd.read_excel("MATERIAL.xlsx").values.tolist()
-celdas = {k: d for [k, v, d] in pd.read_excel("CELDAS.xlsx").values.tolist()}
-moq = {k: g for [k, v, d, r, g] in pd.read_excel("MOQ.xlsx").values.tolist()}
-tipo = {k: v for [k, v, d] in pd.read_excel("TIPO.xlsx").values.tolist()}
+material: list = pd.read_excel("MATERIAL.xlsx").values.tolist()
 
-terminalesM1, terminalesM2 = fucn.getTerminals(material, celdas)
+celdas: dict = {
+    k: d for [k, v, d] in pd.read_excel("CELDAS.xlsx").values.tolist()
+}
 
-matM1: list = fucn.getTotalTerm(terminalesM1, tipo, moq)
-matM2: list = fucn.getTotalTerm(terminalesM2, tipo, moq)
+moq: dict = {
+    k: g for [k, v, d, r, g] in pd.read_excel("MOQ.xlsx").values.tolist()
+}
 
-uniqueCellTermsM1 = fucn.getCellUnique(terminalesM1)
-uniqueCellTermsM2 = fucn.getCellUnique(terminalesM2)
+tipo: dict = {
+    k: v for [k, v, d] in pd.read_excel("TIPO.xlsx").values.tolist()
+}
 
-# print(terminalesM1)
+# Separates terminale m1 from m2 and asigns the cell number
+terminalesM1, terminalesM2 = func.getTerminals(material, celdas)
+
+matM1: list = func.getTotalTerm(terminalesM1, tipo, moq)
+matM2: list = func.getTotalTerm(terminalesM2, tipo, moq)
+
+uniqueCellTermsM1: list = func.getCellUnique(terminalesM1)
+uniqueCellTermsM2: list = func.getCellUnique(terminalesM2)
+
+uniqueM1, generalM1 = func.uniqueCellTermList(matM1, uniqueCellTermsM1)
+
+func.giveLocations("general", generalM1)
 
 if __name__ == "__main__":
     pass

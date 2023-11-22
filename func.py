@@ -1,3 +1,6 @@
+import const
+
+
 def getTerminals(material: list, celdas: dict) -> tuple[list, list]:
     terminal = []
     for i in material:
@@ -59,13 +62,13 @@ def getTotalTerm(terms: list, tipo: dict, moq: dict) -> list:
         else:
             i.append("Rack Grande")
 
-    # for i in unique:
-    #     print(i)
-
     return unique
 
 
 def getCellUnique(terminals: list) -> list:
+    """Returns an array with the terminals that are used
+    in only one cell. the array is composed the following way
+    [ "terminal": str, "cell number": int ]"""
     cells = []
     unique = []
     for i in terminals:
@@ -96,10 +99,36 @@ def getCellUnique(terminals: list) -> list:
             for b in cellTerms:
                 if b[0] == i[0]:
                     uniqueCellTerminal.append(b)
-
-    # for i in terms:
-    #     print(i)
-    for i in uniqueCellTerminal:
-        print(i)
-
     return uniqueCellTerminal
+
+
+def uniqueCellTermList(mat: list, uniquecell: list) -> tuple[list, list]:
+    uniqueList = [i[0] for i in uniquecell]
+
+    unique = []
+    general = []
+    for i in uniquecell:
+        for x in mat:
+            mats = x
+            if x[0] == i[0]:
+                mats.append(i[1])
+                unique.append(mats)
+    for i in mat:
+        if i[0] not in uniqueList and i[-1] == "Rack Grande":
+            general.append(i)
+    return unique, general
+
+
+def giveLocations(type, material):
+    rack = 1
+    count = 0
+    for i in material:
+        count += 1
+        # i.append(count)
+        i.append(f"R{rack}-{const.level[count]}-{const.position[count]}")
+        if count == 15:
+            count = 0
+            rack += 1
+
+    for i in material:
+        print(i)
