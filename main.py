@@ -19,8 +19,8 @@ tipo: dict = {
 # Separates terminale m1 from m2 and asigns the cell number
 terminalesM1, terminalesM2 = func.getTerminals(material, celdas)
 
-matM1: list = func.getTotalTerm(terminalesM1, tipo, moq)
-matM2: list = func.getTotalTerm(terminalesM2, tipo, moq)
+matM1: list = func.getTotalTerm(terminalesM1, tipo, moq, 2)
+matM2: list = func.getTotalTerm(terminalesM2, tipo, moq, 2)
 
 uniqueCellTermsM1: list = func.getCellUnique(terminalesM1)
 uniqueCellTermsM2: list = func.getCellUnique(terminalesM2)

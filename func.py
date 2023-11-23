@@ -21,7 +21,7 @@ def getTerminals(material: list, celdas: dict) -> tuple[list, list]:
     return m1, m2
 
 
-def getTotalTerm(terms: list, tipo: dict, moq: dict) -> list:
+def getTotalTerm(terms: list, tipo: dict, moq: dict, diasStock) -> list:
     days = []
     all = []
     for i in terms:
@@ -47,7 +47,7 @@ def getTotalTerm(terms: list, tipo: dict, moq: dict) -> list:
         i.append(len(days))
         average = total / len(days)
         i.append(average)
-        stock = average * 2
+        stock = average * diasStock
         i.append(stock)
         if i[0] in moq:
             packing = moq[i[0]]
@@ -102,6 +102,60 @@ def getCellUnique(terminals: list) -> list:
     return uniqueCellTerminal
 
 
+def giveLocations(rackType, material):
+    terms = material
+    rack = 1
+    count = 0
+    for i in terms:
+        count += 1
+        # i.append(count)
+        i.append(
+            f"{rackType}{rack}-{const.level[count]}-{const.position[count]}")
+        if count == 15:
+            count = 0
+            rack += 1
+    return terms
+
+
+def arrangeCellRacks(unique):
+    rackGrande = []
+    pocoUso = []
+    for i in unique:
+        if i[-2] == "Rack Grande":
+            rackGrande.append(i)
+        else:
+            if i[1] != "BE.END":
+                pocoUso.append(i)
+
+    cells = {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0,
+    }
+
+    racks = {
+        "1": [],
+        "2": [],
+        "3": [],
+        "4": [],
+        "5": [],
+        "6": [],
+    }
+
+    for i in rackGrande:
+        cells[i[-1]] += 1
+        racks[i[-1]].append(i)
+
+    for i in cells:
+        print(cells[i])
+
+    for i in racks:
+        print(len(racks[i]))
+
+
 def uniqueCellTermList(mat: list, uniquecell: list) -> tuple[list, list]:
     uniqueList = [i[0] for i in uniquecell]
 
@@ -116,19 +170,10 @@ def uniqueCellTermList(mat: list, uniquecell: list) -> tuple[list, list]:
     for i in mat:
         if i[0] not in uniqueList and i[-1] == "Rack Grande":
             general.append(i)
+
+    arrangeCellRacks(unique)
+    # general = giveLocations("R", general)
+    # for i in unique:
+    #     print(i)
+
     return unique, general
-
-
-def giveLocations(type, material):
-    rack = 1
-    count = 0
-    for i in material:
-        count += 1
-        # i.append(count)
-        i.append(f"R{rack}-{const.level[count]}-{const.position[count]}")
-        if count == 15:
-            count = 0
-            rack += 1
-
-    for i in material:
-        print(i)
